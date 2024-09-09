@@ -72,7 +72,7 @@
             switchGenderBtn.onclick = () => {
                 const newSheetName = sheetName === 'men' ? 'women' : 'men';
                 setCookie('sheetName', newSheetName);
-                location.reload();  // Reload the page to reflect the new data
+                window.location.href = window.location.pathname;  // Reload the page by navigating to the current URL
             };
 
             // Now that we have the sheetName, we can use it in script.js to load the correct data
