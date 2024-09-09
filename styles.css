@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#charts-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+label {
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+select {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 5px;
+}
