@@ -108,3 +108,51 @@ select {
     justify-content: flex-start;
     margin-bottom: 5px;
 }
+
+/* Fix the header when scrolling */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Styling for the Erklärung section */
+.erklaerung {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* Styling for the footer */
+footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-left {
+    flex: 1;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.footer-right {
+    flex: 1;
+    text-align: right;
+    padding-right: 20px;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

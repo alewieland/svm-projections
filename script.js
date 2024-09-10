@@ -81,7 +81,7 @@ function getChartOptions() {
             },
             title: {
                 display: true,
-                text: 'Overall Club Standings',
+                text: 'Aktueller Stand',
                 font: {
                     size: isSmallScreen ? 12 : 16 // Adjust font size for small screens
                 }
@@ -216,14 +216,14 @@ function renderChartForDisziplin(discipline, data) {
             labels: sortedClubs, // Each club appears once
             datasets: [
                 {
-                    label: 'Athlete 1',
+                    label: 'Athlet 1',
                     data: athlete1Data, // Data for the stacked bar (Definitiv)
                     backgroundColor: sortedClubs.map((_, index) => {
                         return adjustColorBrightness(clubColorClasses[sortedClubs[index]], -0.1);
                     }) // Base color for Athlete 1
                 },
                 {
-                    label: 'Athlete 2',
+                    label: 'Athlet 2',
                     data: athlete2Data, // Data for the stacked bar (Projektion)
                     backgroundColor: sortedClubs.map((_, index) => {
                         return adjustColorBrightness(clubColorClasses[sortedClubs[index]], 0.1);
