@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVM NLA 2024</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet"> <!-- Link to the external CSS file -->
 </head>
 <body class="bg-light">
 
@@ -51,6 +52,14 @@
                         <!-- Men’s timetable data will be inserted here by JavaScript -->
                     </tbody>
                 </table>
+
+                <!-- Men's Team Colors -->
+                <div class="team-colors mt-3">
+                    <h5 class="text-center">Teamfarben Männer</h5>
+                    <ul id="men-team-colors" class="list-unstyled">
+                        <!-- Team colors for men will be inserted here by JavaScript -->
+                    </ul>
+                </div>
             </div>
 
             <!-- Women’s Timetable -->
@@ -68,16 +77,47 @@
                         <!-- Women’s timetable data will be inserted here by JavaScript -->
                     </tbody>
                 </table>
+
+                <!-- Women's Team Colors -->
+                <div class="team-colors mt-3">
+                    <h5 class="text-center">Teamfarben Frauen</h5>
+                    <ul id="women-team-colors" class="list-unstyled">
+                        <!-- Team colors for women will be inserted here by JavaScript -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="colors.js"></script> <!-- Link to your JS file containing the color definitions -->
+    <script src="timetable.js"></script> <!-- Link to your script file -->
     <script>
+        // Function to create the team color overview dynamically
+        function createTeamColorOverview(clubNames, containerId) {
+            const container = document.getElementById(containerId);
+            clubNames.forEach(club => {
+                const listItem = document.createElement('li');
+                listItem.className = 'team-color-item';
+                
+                const colorBox = document.createElement('span');
+                colorBox.className = `team-color-box ${clubColorClasses[club]}`; // Use the CSS class for background color
+                listItem.appendChild(colorBox);
+                
+                const label = document.createElement('span');
+                label.textContent = ` ${club}`;
+                listItem.appendChild(label);
+
+                container.appendChild(listItem);
+            });
+        }
+
+        // Example usage of createTeamColorOverview:
+        createTeamColorOverview(['LCZ', 'STB', 'LG Züri +', 'LG Basel Regio', 'LC Schaffhausen', 'Stade Gèneve'], 'men-team-colors');
+        createTeamColorOverview(['COA Valais Romand', 'LG Thun', 'LV Winterthur', 'LG LZO', 'BTV Aarau', 'LG Oberthurgau'], 'women-team-colors');
+
         function setSheetName(sheetName) {
             document.cookie = "sheetName=" + sheetName;
         }
     </script>
-    <script src="timetable.js"></script> <!-- Link to your script file -->
 </body>
 </html>

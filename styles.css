@@ -25,3 +25,86 @@ select {
     margin-bottom: 20px;
     padding: 5px;
 }
+
+
+/* styles.css */
+
+/* Team Colors */
+.team-color-lcz {
+    background-color: rgb(50, 55, 60);
+}
+
+.team-color-stb {
+    background-color: rgb(255, 99, 132);
+}
+
+.team-color-lgzuri {
+    background-color: rgb(255, 206, 86);
+}
+
+.team-color-lgregio {
+    background-color: rgb(75, 192, 192);
+}
+
+.team-color-lcs {
+    background-color: rgb(153, 102, 255);
+}
+
+.team-color-stadeg {
+    background-color: rgb(255, 159, 64);
+}
+
+.team-color-coa {
+    background-color: rgb(54, 162, 235);
+}
+
+.team-color-lgt {
+    background-color: rgb(255, 206, 86);
+}
+
+.team-color-lvw {
+    background-color: rgb(50, 55, 60);
+}
+
+.team-color-lglzo {
+    background-color: rgb(50, 55, 60);
+}
+
+.team-color-btva {
+    background-color: rgb(255, 99, 132);
+}
+
+.team-color-lgot {
+    background-color: rgb(255, 99, 132);
+}
+
+/* Podium Colors */
+.podium-color-gold {
+    background-color: rgb(255, 215, 0);
+}
+
+.podium-color-silver {
+    background-color: rgb(192, 192, 192);
+}
+
+.podium-color-bronze {
+    background-color: rgb(205, 127, 50);
+}
+
+/* styles.css */
+
+/* Team Colors */
+.team-color-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 10px;
+    border: 1px solid #000;
+}
+
+.team-color-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+}

@@ -55,29 +55,26 @@ function getChartOptions() {
         scales: {
             x: {
                 beginAtZero: true,
-                stacked: true // Stack the bars
+                stacked: true // Stack the "Definitiv" and "Projektion" bars
             },
             y: {
-                stacked: true // Stack the bars
+                stacked: true // "Definitiv" and "Projektion" bars are stacked
             }
         },
         plugins: {
             legend: {
-                display: false // Hide the legend for simplicity
+                display: true // Show the legend to differentiate between Definitiv and Projektion
             },
             tooltip: {
                 callbacks: {
                     label: function(context) {
                         const datasetIndex = context.datasetIndex;
                         const value = context.raw;
-                        const definitvValue = context.chart.data.datasets[0].data[context.dataIndex];
-                        const projektionValue = context.chart.data.datasets[1].data[context.dataIndex];
-                        const total = definitvValue + projektionValue;
 
                         if (datasetIndex === 0) {
                             return `Definitiv: ${value}`;
                         } else if (datasetIndex === 1) {
-                            return `Projektion: ${value} (Total: ${total})`;
+                            return `Projektion: ${value}`;
                         }
                     }
                 }
@@ -130,14 +127,6 @@ function renderOverallStandings(data) {
         return totalB - totalA;
     });
 
-    // Assign podium colors to the top 3 clubs with adjustments
-    const getBarColor = (index, isProjection) => {
-        if (index === 0) return adjustColorBrightness(podiumColors.gold, isProjection ? 0.1 : -0.1);
-        if (index === 1) return adjustColorBrightness(podiumColors.silver, isProjection ? 0.1 : -0.1);
-        if (index === 2) return adjustColorBrightness(podiumColors.bronze, isProjection ? 0.1 : -0.1);
-        return isProjection ? adjustColorBrightness(clubColors[sortedClubs[index]], 0.1) : clubColors[sortedClubs[index]];
-    };
-
     // Prepare data for Chart.js
     const definitiveData = sortedClubs.map(club => clubData[club].definitive);
     const projectionData = sortedClubs.map(club => clubData[club].projection);
@@ -147,7 +136,6 @@ function renderOverallStandings(data) {
     const chartCanvas = document.createElement('canvas');
     document.getElementById('charts-container').appendChild(chartCanvas);
 
-    // Set canvas height based on screen size
     setCanvasHeight(chartCanvas);
 
     const ctx = chartCanvas.getContext('2d');
@@ -155,17 +143,21 @@ function renderOverallStandings(data) {
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: sortedClubs,
+            labels: sortedClubs, // Each club appears once
             datasets: [
                 {
                     label: 'Definitiv',
-                    data: definitiveData,
-                    backgroundColor: sortedClubs.map((_, index) => getBarColor(index, false)) // Adjust for Definitiv
+                    data: definitiveData, // Data for the stacked bar (Definitiv)
+                    backgroundColor: sortedClubs.map((_, index) => {
+                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], -0.1);
+                    }) // Base color for definitive
                 },
                 {
                     label: 'Projektion',
-                    data: projectionData,
-                    backgroundColor: sortedClubs.map((_, index) => getBarColor(index, true)) // Adjust for Projektion
+                    data: projectionData, // Data for the stacked bar (Projektion)
+                    backgroundColor: sortedClubs.map((_, index) => {
+                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], 0.1);
+                    }) // Base color for projection
                 }
             ]
         },
@@ -186,7 +178,10 @@ function renderChartForDisziplin(discipline, data) {
         clubData[club] = { athlete1: 0, athlete2: 0 };
     });
 
+    let status = "Projektion";  // Default to Projektion
+
     filteredRows.forEach(row => {
+        status = row[2];  // Update status based on data, assuming it's consistent across the discipline
         clubs.forEach((club, index) => {
             const points1 = parseInt(row[index * 2 + 3] || 0);
             const points2 = parseInt(row[index * 2 + 4] || 0);
@@ -202,19 +197,6 @@ function renderChartForDisziplin(discipline, data) {
         return totalB - totalA;
     });
 
-    // Determine brightness adjustment based on status
-    const status = filteredRows[0] && filteredRows[0][2]; // Assuming status is the same for all rows in a discipline
-    const brightnessAdjustmentAthlete1 = (status === "Definitiv") ? -0.15 : 0;
-    const brightnessAdjustmentAthlete2 = (status === "Definitiv") ? -0.05 : 0.1;
-
-    // Assign podium colors to the top 3 clubs with adjustments
-    const getAthleteColor = (index, isAthlete1) => {
-        if (index === 0) return adjustColorBrightness(podiumColors.gold, isAthlete1 ? brightnessAdjustmentAthlete1 : brightnessAdjustmentAthlete2);
-        if (index === 1) return adjustColorBrightness(podiumColors.silver, isAthlete1 ? brightnessAdjustmentAthlete1 : brightnessAdjustmentAthlete2);
-        if (index === 2) return adjustColorBrightness(podiumColors.bronze, isAthlete1 ? brightnessAdjustmentAthlete1 : brightnessAdjustmentAthlete2);
-        return adjustColorBrightness(clubColors[sortedClubs[index]], isAthlete1 ? brightnessAdjustmentAthlete1 : brightnessAdjustmentAthlete2);
-    };
-
     // Prepare data for Chart.js
     const athlete1Data = sortedClubs.map(club => clubData[club].athlete1);
     const athlete2Data = sortedClubs.map(club => clubData[club].athlete2);
@@ -224,7 +206,6 @@ function renderChartForDisziplin(discipline, data) {
     const chartCanvas = document.createElement('canvas');
     document.getElementById('charts-container').appendChild(chartCanvas);
 
-    // Set canvas height based on screen size
     setCanvasHeight(chartCanvas);
 
     const ctx = chartCanvas.getContext('2d');
@@ -232,29 +213,54 @@ function renderChartForDisziplin(discipline, data) {
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: sortedClubs,
+            labels: sortedClubs, // Each club appears once
             datasets: [
                 {
                     label: 'Athlete 1',
-                    data: athlete1Data,
-                    backgroundColor: sortedClubs.map((_, index) => getAthleteColor(index, true)) // Adjusted based on status
+                    data: athlete1Data, // Data for the stacked bar (Definitiv)
+                    backgroundColor: sortedClubs.map((_, index) => {
+                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], -0.1);
+                    }) // Base color for Athlete 1
                 },
                 {
                     label: 'Athlete 2',
-                    data: athlete2Data,
-                    backgroundColor: sortedClubs.map((_, index) => getAthleteColor(index, false)) // Adjusted based on status
+                    data: athlete2Data, // Data for the stacked bar (Projektion)
+                    backgroundColor: sortedClubs.map((_, index) => {
+                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], 0.1);
+                    }) // Base color for Athlete 2
                 }
             ]
         },
-        options: getChartOptions()
+        options: {
+            ...getChartOptions(),
+            plugins: {
+                ...getChartOptions().plugins,
+                title: {
+                    display: true,
+                    text: `${discipline} - ${status}`, // Display the discipline name and status as the title
+                    font: {
+                        size: window.innerWidth < 768 ? 12 : 16 // Adjust font size for small screens
+                    }
+                }
+            }
+        }
     });
 }
 
-// Utility function to adjust color brightness
-function adjustColorBrightness(color, percent) {
+// Utility function to adjust color brightness based on CSS class names
+function adjustColorBrightness(colorClass, percent) {
+    const tempDiv = document.createElement('div');
+    tempDiv.style.display = 'none';
+    tempDiv.className = colorClass;
+    document.body.appendChild(tempDiv);
+
+    const color = window.getComputedStyle(tempDiv).backgroundColor;
     const rgb = color.match(/\d+/g);
+
     const r = Math.min(255, Math.max(0, parseInt(rgb[0]) + percent * 255));
     const g = Math.min(255, Math.max(0, parseInt(rgb[1]) + percent * 255));
     const b = Math.min(255, Math.max(0, parseInt(rgb[2]) + percent * 255));
+
+    document.body.removeChild(tempDiv);
     return `rgb(${r},${g},${b})`;
 }
