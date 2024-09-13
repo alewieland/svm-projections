@@ -11,33 +11,37 @@
 <body class="bg-light">
 
     <!-- Header -->
+<!-- Header -->
     <header class="bg-primary text-white py-3">
         <div class="container">
             <div class="row">
                 <div class="col text-center">
-                    <h1>SVM NLA 2024</h1>
+                    <h1 id="pageTitle">SVM NLA 2024</h1>
+                    <h3 id="pageSubtitle">Stadion Deutweg, Winterthur, 14.9.2024</h3>
                 </div>
             </div>
         </div>
     </header>
     
     <div class="container my-4">
-        <h1 class="text-center mb-2">SVM NLA 2024</h1>
-        <h3 class="text-center mb-2">Stadion Deutweg, 14.9.2024</h3>
         <p class="text-center mb-4"><strong>Last but not least</strong>: Die SVM 2024 bieten die letzte Gelegenheit für packende Duelle. Die Website bietet nicht "nur" die erreichten Punkte, sondern gibt auch eine Projektion, wie viele Punkte aufgrund der Meldeliste noch erreicht werden sollten. Eine Erklärung findet Ihr <a href="#erklaerung">hier</a></p>
         <p class="text-center mb-4"><strong>Information pour les francophones</strong>: Veuillez nous excuser, le site est en allemand et bonne chance pour le compétition CSI. Le site n'affiche pas seulement les points obtenus, mais propose également une projection des points qui devraient encore être atteints en fonction de la liste des engagés. Une explication se trouve <a href="#erklaerung">ici</a>. </p>
 
         <!-- Row for the buttons -->
-<!-- Row for the buttons -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-3 text-center">
+                <button id="switchLeagueBtn" class="btn btn-success btn-lg w-100"></button>
+            </div>
+        </div>
+
         <div class="row justify-content-center mb-4">
             <div class="col-md-3 text-center mb-3 mb-md-0">
                 <a href="projections.html" class="btn btn-primary btn-lg w-100" onclick="setSheetName('men')" style="background-color: blue;">Projektion Männer</a>
             </div>
-            <div class="col-md-3 text-center">
+            <div class="col-md-3 text-center mb-3 mb-md-0">
                 <a href="projections.html" class="btn btn-secondary btn-lg w-100" onclick="setSheetName('women')" style="background-color: darksalmon;">Projektion Frauen</a>
             </div>
         </div>
-
 
         <!-- Row for the timetables -->
         <div class="row">
@@ -106,6 +110,9 @@
             <p>   Le horaire est visible en haut, en cliquant sur le bouton "Projektion Männer" ou "Projektion Frauen", la vue d'ensemble actuelle est affichée. La partie plus sombre de la barre représente les disciplines terminées, la partie plus claire représente les points projetés. Les clubs sont classés selon le classement projeté.</p>
             <p>    À l'aide du menu déroulant, vous pouvez sélectionner les différentes disciplines et afficher les points obtenus ou projetés.</p> <br>
 
+            <h5>Korrekturen</h5>
+            <p>Falls etwas offensichtlich falsch ist, bitte eine kurze Nachricht an 076 420 54 33. Danke</p>
+
         </div>
     </div>
 
@@ -144,43 +151,127 @@
                 const label = document.createElement('span');
                 label.textContent = ` ${club}`;
                 listItem.appendChild(label);
-
+    
                 container.appendChild(listItem);
             });
         }
-
-        // Example usage of createTeamColorOverview:
-        createTeamColorOverview(['LCZ', 'STB', 'LG Züri +', 'LG Basel Regio', 'LC Schaffhausen', 'Stade Gèneve', 'COA Valais Romand', 'LG Thun'], 'men-team-colors');
-        createTeamColorOverview(['LCZ', 'STB', 'LV Winterthur', 'LG LZO', 'BTV Aarau', 'LG Basel Regio', 'LG Oberthurgau', 'LG Züri +'], 'women-team-colors');
-
-        function setSheetName(sheetName) {
-            document.cookie = "sheetName=" + sheetName;
+    
+        // Function to get a cookie by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
         }
-
-        // Cookie Consent Popup
+    
+        // Function to set a cookie by name
+        function setCookie(name, value) {
+            document.cookie = `${name}=${value}; path=/`;
+        }
+    
+        // Function to toggle the league and update the page
+        function toggleLeague() {
+            let league = getCookie('league');
+            if (!league || league === 'nla') {
+                league = 'nlb';
+            } else {
+                league = 'nla';
+            }
+            setCookie('league', league);
+            // Reload the page to apply changes
+            window.location.replace(window.location.pathname + '?t=' + new Date().getTime());
+        }
+    
+        // Function to update the page title and switch league button text
+        function updatePageForLeague() {
+            let league = getCookie('league');
+            if (!league) {
+                league = 'nla'; // Default to NLA
+                setCookie('league', league);
+            }
+    
+            // Update page title and header
+            document.title = `SVM ${league.toUpperCase()} 2024`;
+            document.querySelector('header h1').textContent = `SVM ${league.toUpperCase()} 2024`;
+            document.querySelector('.container h1').textContent = `SVM ${league.toUpperCase()} 2024`;
+    
+            // Update the subtitle based on the league
+            const pageSubtitle = document.getElementById('pageSubtitle');
+            if (league === 'nla') {
+                pageSubtitle.textContent = 'Stadion Deutweg, Winterthur, 14.9.2024';
+            } else {
+                pageSubtitle.textContent = 'Leichtathletikanlage Neudorf, St. Gallen, 14.2.2024';
+            }
+    
+            // Update the switch league button text
+            const switchLeagueBtn = document.getElementById('switchLeagueBtn');
+            switchLeagueBtn.textContent = league === 'nla' ? "Zur NLB" : "Zur NLA";
+            switchLeagueBtn.onclick = toggleLeague;
+    
+            // Update the projection buttons to include the correct league in the sheetName
+            const menButton = document.querySelector('a[onclick="setSheetName(\'men\')"]');
+            const womenButton = document.querySelector('a[onclick="setSheetName(\'women\')"]');
+    
+            menButton.setAttribute('onclick', `setSheetName('men${league === 'nlb' ? '_nlb' : ''}')`);
+            womenButton.setAttribute('onclick', `setSheetName('women${league === 'nlb' ? '_nlb' : ''}')`);
+    
+            // Update the team color overviews
+            updateTeamColorOverviews(league);
+        }
+    
+        // Function to update team color overviews based on the league
+        function updateTeamColorOverviews(league) {
+            // Clear existing team color overviews
+            document.getElementById('men-team-colors').innerHTML = '';
+            document.getElementById('women-team-colors').innerHTML = '';
+    
+            if (league === 'nla') {
+                // NLA teams
+                createTeamColorOverview(['LCZ', 'STB', 'LG Züri +', 'LG Basel Regio', 'LC Schaffhausen', 'Stade Gèneve', 'COA Valais Romand', 'LG Thun'], 'men-team-colors');
+                createTeamColorOverview(['LCZ', 'STB', 'LV Winterthur', 'LG LZO', 'BTV Aarau', 'LG Basel Regio', 'LG Oberthurgau', 'LG Züri +'], 'women-team-colors');
+            } else {
+                // NLB teams (update these lists with actual NLB teams)
+                createTeamColorOverview(['LV Winterthur', 'COA LR', 'TVL', 'BTV Aarau', 'LC Brühl LA', 'LG LZO', 'LG NS Luzern', 'FSG Alle'], 'men-team-colors');
+                createTeamColorOverview(['LC Brühl LA', 'TV Wohlen', 'LG Thun', 'COA LR', 'LC Schaffhausen', 'LGKE', 'LG NS Luzern', 'LC Frauenfeld'], 'women-team-colors');
+            }
+        }
+    
+        // Modify the setSheetName function to also set the league if not already set
+        function setSheetName(sheetName) {
+            let league = getCookie('league');
+            if (!league) {
+                league = 'nla';
+                setCookie('league', league);
+            }
+            // Append '_nlb' to the sheetName if the league is NLB
+            if (league === 'nlb' && !sheetName.endsWith('_nlb')) {
+                sheetName += '_nlb';
+            }
+            document.cookie = "sheetName=" + sheetName + "; path=/";
+        }
+    
+        // Call updatePageForLeague when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePageForLeague();
+            showCookieConsent();
+        });
+    
+        // Existing Cookie Consent functions
         function showCookieConsent() {
             const consent = getCookie("cookieConsent");
             if (!consent) {
                 document.getElementById('cookieConsent').style.display = 'block';
             }
         }
-
+    
         function acceptCookies() {
             document.cookie = "cookieConsent=accepted; max-age=" + (60 * 60 * 24 * 365) + "; path=/";
             document.getElementById('cookieConsent').style.display = 'none';
         }
-
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-
+    
         document.getElementById('acceptCookies').addEventListener('click', acceptCookies);
-
-        window.onload = function() {
-            showCookieConsent();
-        };
     </script>
+    
+
+    
 </body>
 </html>

@@ -5,9 +5,25 @@ const apiKey = 'AIzaSyCQtpGO-z7Nh2bzQXMT4PIs3qviIqNeVIo';
 let sheetData = [];
 // script.js
 
-// API URLs for Men and Women
-const apiUrlMen = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/men?key=${apiKey}`;
-const apiUrlWomen = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/women?key=${apiKey}`;
+// timetable.js
+
+// Function to get the league from the cookie
+function getLeague() {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; league=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return 'nla'; // Default to NLA
+}
+
+// Get the current league
+const league = getLeague();
+
+// Update API URLs based on the league
+const sheetNameMen = league === 'nlb' ? 'men_nlb' : 'men';
+const sheetNameWomen = league === 'nlb' ? 'women_nlb' : 'women';
+
+const apiUrlMen = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetNameMen}?key=${apiKey}`;
+const apiUrlWomen = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetNameWomen}?key=${apiKey}`;
 
 // Fetch data from Google Sheets for the timetable
 function fetchTimetable(apiUrl, targetElementId) {

@@ -1,28 +1,44 @@
-// Google Sheets API settings
-const sheetId = '1KRsABdUN_udlAde7TE5aIrYHQ9-2HbnHwlHQTrN-R4E';  // Replace with your Google Sheet ID
-const apiKey = 'AIzaSyCQtpGO-z7Nh2bzQXMT4PIs3qviIqNeVIo';    // Replace with your Google API Key
-
 // Global variable to hold data
 let sheetData = [];
 
-// Function to load projections based on sheet name
 function loadProjections(sheetName) {
-    const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
+    const apiUrl = getApiUrl(sheetName);
 
-    // Fetch data from Google Sheets
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            sheetData = data.values;
-            populateDisziplinSelect(sheetData);
-            renderOverallStandings(sheetData);  // Render overall standings on load
+            // Process and display the data
+            processProjectionData(data);
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => console.error('Error fetching projection data:', error));
+}
+
+// Function to construct the API URL
+function getApiUrl(sheetName) {
+    const sheetId = '1KRsABdUN_udlAde7TE5aIrYHQ9-2HbnHwlHQTrN-R4E';
+    const apiKey = 'AIzaSyCQtpGO-z7Nh2bzQXMT4PIs3qviIqNeVIo';
+    return `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
+}
+
+// Function to process and display the data
+function processProjectionData(data) {
+    // Save the data to the global variable
+    sheetData = data.values; // Assuming data.values contains the array of arrays
+
+    // Populate the discipline select dropdown
+    populateDisziplinSelect(sheetData);
+
+    // Render the overall standings initially
+    renderOverallStandings(sheetData);
 }
 
 // Populate Disziplin dropdown
 function populateDisziplinSelect(data) {
     const disziplinSelect = document.getElementById('disziplinSelect');
+
+    // Clear any existing options except the first one
+    disziplinSelect.options.length = 1; // Keep the "Gesamtübersicht" option
+
     const disciplines = [...new Set(data.slice(1).map(row => row[1]).filter(d => d))]; // Get unique disciplines, filtering out any empty values
 
     disciplines.forEach(discipline => {
@@ -148,15 +164,15 @@ function renderOverallStandings(data) {
                 {
                     label: 'Definitiv',
                     data: definitiveData, // Data for the stacked bar (Definitiv)
-                    backgroundColor: sortedClubs.map((_, index) => {
-                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], -0.1);
+                    backgroundColor: sortedClubs.map((club) => {
+                        return adjustColorBrightness(clubColorClasses[club], -0.1);
                     }) // Base color for definitive
                 },
                 {
                     label: 'Projektion',
                     data: projectionData, // Data for the stacked bar (Projektion)
-                    backgroundColor: sortedClubs.map((_, index) => {
-                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], 0.1);
+                    backgroundColor: sortedClubs.map((club) => {
+                        return adjustColorBrightness(clubColorClasses[club], 0.1);
                     }) // Base color for projection
                 }
             ]
@@ -217,16 +233,16 @@ function renderChartForDisziplin(discipline, data) {
             datasets: [
                 {
                     label: 'Athlet 1',
-                    data: athlete1Data, // Data for the stacked bar (Definitiv)
-                    backgroundColor: sortedClubs.map((_, index) => {
-                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], -0.1);
+                    data: athlete1Data, // Data for the first athlete
+                    backgroundColor: sortedClubs.map((club) => {
+                        return adjustColorBrightness(clubColorClasses[club], -0.1);
                     }) // Base color for Athlete 1
                 },
                 {
                     label: 'Athlet 2',
-                    data: athlete2Data, // Data for the stacked bar (Projektion)
-                    backgroundColor: sortedClubs.map((_, index) => {
-                        return adjustColorBrightness(clubColorClasses[sortedClubs[index]], 0.1);
+                    data: athlete2Data, // Data for the second athlete
+                    backgroundColor: sortedClubs.map((club) => {
+                        return adjustColorBrightness(clubColorClasses[club], 0.1);
                     }) // Base color for Athlete 2
                 }
             ]

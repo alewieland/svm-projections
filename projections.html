@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
+    <!-- Existing head content -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Projections</title>
+    <title>Projektion</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,15 +15,25 @@
     <div class="container my-4">
         <!-- Navigation Buttons -->
         <div class="row justify-content-center mb-4">
-            <div class="col-md-4 text-center mb-2">
+
+            <div class="col-md-3 text-center mb-3 mb-md-0">
+                <button id="switchLeagueBtn" class="btn btn-success btn-lg w-100"></button>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mb-4">
+            <!-- Back to Index Button -->
+            <div class="col-md-3 text-center mb-3 mb-md-0">
                 <a href="index.html" class="btn btn-secondary btn-lg w-100">Zurück zum Zeitplan</a>
             </div>
-            <div class="col-md-4 text-center mb-2">
+
+            <!-- Switch Gender Button -->
+            <div class="col-md-3 text-center">
                 <button id="switchGenderBtn" class="btn btn-primary btn-lg w-100"></button>
             </div>
         </div>
 
-        <h1 class="text-center mb-4" id="pageTitle">Projektion</h1>
+        <h1 class="text-center mb-4" id="pageTitle">Projektion & Resultate</h1>
 
         <!-- Hidden input to pass the sheet name -->
         <input type="hidden" id="sheetName" value="">
@@ -40,6 +51,7 @@
         <div id="charts-container" class="mt-4"></div>
     </div>
 
+    <!-- Include your scripts -->
     <script src="script.js"></script>
 
     <script>
@@ -57,21 +69,56 @@
 
         // Function to set a cookie by name
         function setCookie(name, value) {
-            document.cookie = `${name}=${value}; path=/svm-projections`;
+            document.cookie = `${name}=${value}; path=/`;
         }
 
         // Set the hidden input value, update the page title, and handle button functionality
         document.addEventListener('DOMContentLoaded', () => {
-            const sheetName = getCookie('sheetName');
+            let sheetName = getCookie('sheetName');
+            if (!sheetName) {
+                sheetName = 'men'; // Default to 'men' if no cookie is set
+                setCookie('sheetName', sheetName);
+            }
+
+            // Parse the sheetName to get gender and league
+            let gender = '';
+            let league = '';
+
+            if (sheetName.endsWith('_nlb')) {
+                league = 'nlb';
+                gender = sheetName.slice(0, -4); // Remove '_nlb' from sheetName
+            } else {
+                league = 'nla';
+                gender = sheetName;
+            }
+
+            // Update the hidden input value
             document.getElementById('sheetName').value = sheetName;
-            document.getElementById('pageTitle').textContent = sheetName === 'men' ? "Projektion SVM Männer 2024" : "Projektion SVM Frauen 2024";
+
+            // Update the page title
+            const leagueText = league.toUpperCase();
+            const genderText = gender === 'men' ? 'Männer' : 'Frauen';
+            document.getElementById('pageTitle').textContent = `Projektion SVM ${genderText} 2024 ${leagueText}`;
+
+            // Set the switch league button text and functionality
+            const switchLeagueBtn = document.getElementById('switchLeagueBtn');
+            switchLeagueBtn.textContent = league === 'nla' ? "Zur NLB" : "Zur NLA";
+            switchLeagueBtn.onclick = () => {
+                const newLeague = league === 'nla' ? 'nlb' : 'nla';
+                const newSheetName = newLeague === 'nlb' ? `${gender}_nlb` : gender;
+                setCookie('sheetName', newSheetName);
+                // Reload the page to apply changes
+                window.location.replace(window.location.pathname + '?t=' + new Date().getTime());
+            };
 
             // Set the switch gender button text and functionality
             const switchGenderBtn = document.getElementById('switchGenderBtn');
-            switchGenderBtn.textContent = sheetName === 'men' ? "Zu den Frauen" : "Zu den Männer";
+            switchGenderBtn.textContent = gender === 'men' ? "Zu den Frauen" : "Zu den Männer";
             switchGenderBtn.onclick = () => {
-                const newSheetName = sheetName === 'men' ? 'women' : 'men';
+                const newGender = gender === 'men' ? 'women' : 'men';
+                const newSheetName = league === 'nlb' ? `${newGender}_nlb` : newGender;
                 setCookie('sheetName', newSheetName);
+                // Reload the page to apply changes
                 window.location.replace(window.location.pathname + '?t=' + new Date().getTime());
             };
 

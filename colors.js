@@ -12,7 +12,15 @@ const clubColorClasses = {
     "LV Winterthur": 'team-color-lvw',
     "LG LZO": 'team-color-lglzo',
     "BTV Aarau": 'team-color-btva',
-    "LG Oberthurgau": 'team-color-lgot'
+    "LG Oberthurgau": 'team-color-lgot',
+    "COA LR": "team-color-coalr",
+    "TVL": "team-color-tvl",
+    "LC Brühl LA":"team-color-lcbla",
+    "LG NS Luzern":"team-color-lgnslu",
+    "FSG Alle": "team-color-fsga",
+    "TV Wohlen": "team-color-tvw",
+    "LC Frauenfeld": "team-color-lcf",
+    "LGKE": "team-color-lgke",
 };
 
 // Podium color classes
