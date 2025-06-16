@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVM Betting App</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+</head>
+<body>
+    <div id="app">
+      <h1>{{ title }}</h1>
+
+      <div v-if="!user">
+        <input type="email" v-model="email" placeholder="email" />
+        <input type="password" v-model="password" placeholder="password" />
+        <button @click="login">Login</button>
+      </div>
+
+      <div v-else>
+        <p>Logged in as {{ user.email }}</p>
+        <div>
+          <label>Team:
+            <select v-model="selectedClub">
+              <option value="" disabled>Select team</option>
+              <option v-for="c in clubs" :key="c.id" :value="c.id">{{ c.name }}</option>
+            </select>
+          </label>
+        </div>
+        <div v-if="selectedClub">
+          <label>Opponent:
+            <select v-model="opponentClub">
+              <option value="" disabled>Select opponent</option>
+              <option v-for="c in opponentOptions" :key="c.id" :value="c.id">{{ c.name }} (odds: {{ odds[c.id] || 1 }})</option>
+            </select>
+          </label>
+        </div>
+        <div v-if="opponentClub">
+          <input type="number" v-model="amount" placeholder="Amount" />
+          <button @click="placeBet">Place Bet</button>
+        </div>
+        <ul>
+          <li v-for="u in users" :key="u.id">{{ u.email }} - Coins: {{ u.coins }}</li>
+        </ul>
+      </div>
+    </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: 'YOUR_API_KEY',
+      authDomain: 'YOUR_PROJECT.firebaseapp.com'
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const auth = getAuth(fbApp);
+
+    const { createApp, ref, onMounted, watch, computed } = Vue;
+    createApp({
+      setup() {
+        const title = ref('SVM Betting');
+        const users = ref([]);
+        const user = ref(null);
+        const email = ref('');
+        const password = ref('');
+        const clubs = ref([]);
+        const selectedClub = ref('');
+        const opponentClub = ref('');
+        const odds = ref({});
+        const amount = ref(0);
+        const token = ref('');
+
+        const login = async () => {
+          await signInWithEmailAndPassword(auth, email.value, password.value);
+        };
+
+        const fetchUsers = async (token) => {
+          const res = await fetch('/api/users', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          users.value = await res.json();
+        };
+
+        const fetchClubs = async () => {
+          const res = await fetch('/api/clubs');
+          clubs.value = await res.json();
+        };
+
+        const fetchOdds = async (clubId) => {
+          if (!clubId) return;
+          const res = await fetch(`/api/odds/club/${clubId}`);
+          const data = await res.json();
+          odds.value = data.odds_details || {};
+        };
+
+        const placeBet = async () => {
+          if (!token.value) return;
+          const res = await fetch('/api/bets', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token.value}`
+            },
+            body: JSON.stringify({
+              user_id: user.value.uid,
+              event_id: 'default',
+              club_picked: selectedClub.value,
+              amount: Number(amount.value),
+              odds: odds.value[opponentClub.value] || 1
+            })
+          });
+          await res.json();
+        };
+
+        onMounted(() => {
+          onAuthStateChanged(auth, async (u) => {
+            user.value = u;
+            users.value = [];
+            if (u) {
+              token.value = await u.getIdToken();
+              await fetchUsers(token.value);
+              await fetchClubs();
+            } else {
+              token.value = '';
+            }
+          });
+        });
+
+        watch(selectedClub, async (val) => {
+          opponentClub.value = '';
+          odds.value = {};
+          await fetchOdds(val);
+        });
+
+        const opponentOptions = computed(() => clubs.value.filter(c => c.id !== selectedClub.value));
+        return { title, users, user, email, password, login, clubs, selectedClub, opponentClub, amount, odds, opponentOptions, placeBet };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

@@ -1,1 +1,42 @@
 # svm-projections
+
+This repository contains a simple layered web application with a Vue.js frontend and a FastAPI backend.
+
+## Structure
+
+- `frontend/` – minimal Vue application
+- `backend/` – FastAPI service exposing Firestore based APIs with full CRUD endpoints
+
+## Development
+
+1. Install Python dependencies and run the backend:
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   uvicorn src.main:app --reload
+   ```
+
+2. Open `frontend/index.html` in your browser during local development.
+
+The frontend uses Firebase Authentication. Update the configuration in
+`frontend/index.html` with your Firebase project credentials.
+
+Once logged in you can select a team and see the odds against the other clubs.
+Submitting the form will create a bet in Firestore.
+
+## Deployment
+
+Terraform configuration is provided in the `infra/` directory. Copy
+`terraform.tfvars.example` to `terraform.tfvars` and update the values for your
+Google Cloud project and container image. Initialize and apply the configuration
+to create a Cloud Run service:
+
+```bash
+cd infra
+terraform init
+terraform apply
+```
+
+The repository also contains a `cloudbuild.yaml` file which you can trigger with
+Google Cloud Build to build and push the backend image referenced by the
+Terraform configuration.
