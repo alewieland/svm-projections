@@ -3,10 +3,12 @@ from fastapi import APIRouter, HTTPException
 from fastapi import Body
 
 from ..services.firestore import FirestoreService
+from ..services.bigquery import BigQueryService
 from ..schemas.bet import Bet
 
 router = APIRouter()
 service = FirestoreService("bets")
+bq = BigQueryService("svm", "bets")
 
 
 @router.get("/", response_model=list[Bet])
@@ -19,7 +21,12 @@ async def create_bet(bet: Bet):
     data = bet.model_dump(exclude={"id"})
     if not data.get("placed_at"):
         data["placed_at"] = datetime.now(timezone.utc)
-    return service.create(data)
+    bet_id = service.create(data)
+    try:
+        bq.insert({"id": bet_id, **data})
+    except Exception:
+        pass
+    return bet_id
 
 
 @router.get("/{bet_id}", response_model=Bet)
