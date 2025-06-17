@@ -1,3 +1,4 @@
+import firebase_admin
 from google.cloud import firestore
 from firebase_admin import credentials, initialize_app
 from .config import get_settings
@@ -11,3 +12,5 @@ else:
     initialize_app()
 
 client = firestore.Client(project=_settings.PROJECT_ID)
+
+

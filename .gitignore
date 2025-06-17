@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
-.env
+.env*
 *.tfstate
 *.tfstate.*
+**/*.json
+*.json
 .DS_Store
