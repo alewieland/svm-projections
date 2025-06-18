@@ -34,3 +34,13 @@ resource "google_project_service" "run" {
 resource "google_project_service" "firestore" {
   service = "firestore.googleapis.com"
 }
+
+resource "google_project_service" "bigquery" {
+  service = "bigquery.googleapis.com"
+}
+
+resource "google_bigquery_dataset" "bets" {
+  dataset_id                  = "svm"
+  location                    = var.region
+  delete_contents_on_destroy  = true
+}

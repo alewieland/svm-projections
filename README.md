@@ -16,7 +16,19 @@ This repository contains a simple layered web application with a Vue.js frontend
    uvicorn src.main:app --reload
    ```
 
-2. Open `frontend/index.html` in your browser during local development.
+2. Install the Firebase CLI and start the emulators for Firestore and Hosting:
+   ```bash
+   npm install -g firebase-tools
+   firebase emulators:start --project svm-projections
+   ```
+
+3. Alternatively you can start everything using Docker:
+   ```bash
+   docker-compose up
+   ```
+
+4. Open `frontend/index.html` in your browser during local development.
+   Admins can inspect all bets via `frontend/admin.html`.
 
 The frontend uses Firebase Authentication. Update the configuration in
 `frontend/index.html` with your Firebase project credentials.
@@ -40,3 +52,12 @@ terraform apply
 The repository also contains a `cloudbuild.yaml` file which you can trigger with
 Google Cloud Build to build and push the backend image referenced by the
 Terraform configuration.
+
+You can deploy the frontend using Firebase Hosting:
+
+```bash
+firebase deploy --only hosting --project svm-projections
+```
+
+The backend writes each created bet to BigQuery. Ensure a dataset named `svm`
+and a table `bets` exist in your project so that writes succeed.
