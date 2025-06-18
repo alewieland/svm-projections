@@ -1,6 +1,7 @@
 fastapi>=0.115.12
 firebase-admin>=6.9.0
 google-cloud-firestore>=2.21.0
+google-cloud-bigquery>=3.22.0
 passlib[bcrypt]>=1.7.4
 python-dotenv>=1.1.0
 python-jose[cryptography]>=3.5.0
