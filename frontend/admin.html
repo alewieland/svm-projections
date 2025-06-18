@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Bets</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>All Bets</h1>
+    <div v-if="!user">
+      <input type="email" v-model="email" placeholder="email" />
+      <input type="password" v-model="password" placeholder="password" />
+      <button @click="login">Login</button>
+    </div>
+    <div v-else>
+      <p>Logged in as {{ user.email }}</p>
+      <div v-if="role !== 'admin'">
+        <p>You are not authorized to view this page.</p>
+      </div>
+      <div v-else>
+        <ul>
+          <li v-for="b in bets" :key="b.id">
+            {{ b.user_id }} - {{ b.club_picked }} - {{ b.amount }} coins @ {{ b.odds }} ({{ b.status }})
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: 'YOUR_API_KEY',
+      authDomain: 'YOUR_PROJECT.firebaseapp.com'
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const auth = getAuth(fbApp);
+    const { createApp, ref, onMounted } = Vue;
+
+    createApp({
+      setup() {
+        const user = ref(null);
+        const email = ref('');
+        const password = ref('');
+        const bets = ref([]);
+        const role = ref('user');
+        const token = ref('');
+
+        const login = async () => {
+          await signInWithEmailAndPassword(auth, email.value, password.value);
+        };
+
+        const fetchBets = async (token) => {
+          const res = await fetch('/api/bets', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          bets.value = await res.json();
+        };
+
+        const fetchRole = async (token, uid) => {
+          const res = await fetch(`/api/users/${uid}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await res.json();
+          role.value = data.role || 'user';
+          return role.value;
+        };
+
+        onMounted(() => {
+          onAuthStateChanged(auth, async (u) => {
+            user.value = u;
+            bets.value = [];
+            if (u) {
+              token.value = await u.getIdToken();
+              const r = await fetchRole(token.value, u.uid);
+              if (r === 'admin') {
+                await fetchBets(token.value);
+              }
+            } else {
+              token.value = '';
+              role.value = 'user';
+            }
+          });
+        });
+
+        return { user, email, password, login, bets, role };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

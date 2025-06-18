@@ -4,7 +4,10 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       { "source": "/api/**", "run": { "serviceId": "svm-backend", "region": "us-central1" } },
-      { "source": "**", "destination": "/index.html" }
+      { "source": "/admin", "destination": "/admin.html" },
+      { "source": "/admin.html", "destination": "/admin.html" },
+
+
     ]
   }
 }
