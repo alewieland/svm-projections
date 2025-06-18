@@ -30,6 +30,7 @@ This repository contains a simple layered web application with a Vue.js frontend
 4. Open `frontend/index.html` in your browser during local development.
    Admins can inspect all bets via `frontend/admin.html`.
 
+
 The frontend uses Firebase Authentication. Update the configuration in
 `frontend/index.html` with your Firebase project credentials.
 

@@ -6,7 +6,8 @@
       { "source": "/api/**", "run": { "serviceId": "svm-backend", "region": "us-central1" } },
       { "source": "/admin", "destination": "/admin.html" },
       { "source": "/admin.html", "destination": "/admin.html" },
-      { "source": "**", "destination": "/index.html" }
+
+
     ]
   }
 }
