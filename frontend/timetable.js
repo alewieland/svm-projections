@@ -1,6 +1,7 @@
 // Data is now loaded via the backend instead of Google Sheets
 let sheetData = [];
 
+
 // Function to get the league from the cookie
 function getLeague() {
     const value = `; ${document.cookie}`;

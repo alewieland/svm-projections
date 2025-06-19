@@ -16,6 +16,7 @@ function loadProjections(sheetName) {
 // Function to construct the API URL
 function getApiUrl(sheetName) {
     return `/api/projections/${sheetName}`;
+
 }
 
 // Function to process and display the data
