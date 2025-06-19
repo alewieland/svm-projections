@@ -1,6 +1,6 @@
 # svm-projections
 
-This repository contains a simple layered web application with a Vue.js frontend and a FastAPI backend.
+This repository contains a simple layered web application with a Vue.js frontend and a FastAPI backend.  Originally projection data was pulled directly from Google Sheets but it is now served from BigQuery via the backend.
 
 ## Structure
 
@@ -61,4 +61,6 @@ firebase deploy --only hosting --project svm-projections
 ```
 
 The backend writes each created bet to BigQuery. Ensure a dataset named `svm`
-and a table `bets` exist in your project so that writes succeed.
+and a table `bets` exist in your project so that writes succeed.  Projection
+data is served from the table `svm.projections` and can be queried via
+`GET /projections/{sheet_name}`.
