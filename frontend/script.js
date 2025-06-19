@@ -15,9 +15,8 @@ function loadProjections(sheetName) {
 
 // Function to construct the API URL
 function getApiUrl(sheetName) {
-    const sheetId = '1KRsABdUN_udlAde7TE5aIrYHQ9-2HbnHwlHQTrN-R4E';
-    const apiKey = 'AIzaSyCQtpGO-z7Nh2bzQXMT4PIs3qviIqNeVIo';
-    return `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
+    return `/api/projections/${sheetName}`;
+
 }
 
 // Function to process and display the data

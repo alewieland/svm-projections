@@ -1,3 +1,10 @@
-from . import users, events, clubs, bets, odds
+from . import users, events, clubs, bets, odds, projections
 
-__all__ = ["users", "events", "clubs", "bets", "odds"]
+__all__ = [
+    "users",
+    "events",
+    "clubs",
+    "bets",
+    "odds",
+    "projections",
+]

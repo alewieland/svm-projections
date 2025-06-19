@@ -1,11 +1,6 @@
-// Google Sheets API settings
-const sheetId = '1KRsABdUN_udlAde7TE5aIrYHQ9-2HbnHwlHQTrN-R4E';  
-const apiKey = 'AIzaSyCQtpGO-z7Nh2bzQXMT4PIs3qviIqNeVIo';    
-
+// Data is now loaded via the backend instead of Google Sheets
 let sheetData = [];
-// script.js
 
-// timetable.js
 
 // Function to get the league from the cookie
 function getLeague() {
@@ -22,8 +17,8 @@ const league = getLeague();
 const sheetNameMen = league === 'nlb' ? 'men_nlb' : 'men';
 const sheetNameWomen = league === 'nlb' ? 'women_nlb' : 'women';
 
-const apiUrlMen = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetNameMen}?key=${apiKey}`;
-const apiUrlWomen = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetNameWomen}?key=${apiKey}`;
+const apiUrlMen = `/api/projections/${sheetNameMen}`;
+const apiUrlWomen = `/api/projections/${sheetNameWomen}`;
 
 // Fetch data from Google Sheets for the timetable
 function fetchTimetable(apiUrl, targetElementId) {
