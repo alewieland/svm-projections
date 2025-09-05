@@ -15,7 +15,8 @@ function loadProjections(sheetName) {
 
 // Function to construct the API URL
 function getApiUrl(sheetName) {
-    const sheetId = '1KRsABdUN_udlAde7TE5aIrYHQ9-2HbnHwlHQTrN-R4E';
+    // Updated sheet ID to new Google Sheet containing combined league data
+    const sheetId = '1LHRhrAaCKMQ0SQUtcPieYWGh2sJVNCS1KxoPwTygoAw';
     const apiKey = 'AIzaSyCQtpGO-z7Nh2bzQXMT4PIs3qviIqNeVIo';
     return `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${apiKey}`;
 }
@@ -115,7 +116,8 @@ function setCanvasHeight(chartCanvas) {
 // Render Overall Standings
 function renderOverallStandings(data) {
     const headers = data[0];
-    const clubs = Array.from(new Set(headers.slice(3))); // Extract unique club names
+    // Skip Zeit, Disziplin, Gender and Status columns
+    const clubs = Array.from(new Set(headers.slice(4))); // Extract unique club names
     const clubData = {};
 
     // Initialize club data structure
@@ -124,10 +126,10 @@ function renderOverallStandings(data) {
     });
 
     data.slice(1).forEach(row => {
-        const status = row[2]; // Status (Projektion or Definitiv)
+        const status = row[3]; // Status (Projektion or Definitiv)
         clubs.forEach((club, index) => {
-            const points1 = parseInt(row[index * 2 + 3] || 0);
-            const points2 = parseInt(row[index * 2 + 4] || 0);
+            const points1 = parseInt(row[index * 2 + 4] || 0);
+            const points2 = parseInt(row[index * 2 + 5] || 0);
             if (status === "Projektion") {
                 clubData[club].projection += points1 + points2;
             } else if (status === "Definitiv") {
@@ -185,7 +187,8 @@ function renderOverallStandings(data) {
 function renderChartForDisziplin(discipline, data) {
     const filteredRows = data.slice(1).filter(row => row[1] === discipline);
     const headers = data[0];
-    const clubs = Array.from(new Set(headers.slice(3))); // Extract unique club names
+    // Skip Zeit, Disziplin, Gender and Status columns
+    const clubs = Array.from(new Set(headers.slice(4))); // Extract unique club names
 
     const clubData = {};
 
@@ -197,10 +200,10 @@ function renderChartForDisziplin(discipline, data) {
     let status = "Projektion";  // Default to Projektion
 
     filteredRows.forEach(row => {
-        status = row[2];  // Update status based on data, assuming it's consistent across the discipline
+        status = row[3];  // Update status based on data, assuming it's consistent across the discipline
         clubs.forEach((club, index) => {
-            const points1 = parseInt(row[index * 2 + 3] || 0);
-            const points2 = parseInt(row[index * 2 + 4] || 0);
+            const points1 = parseInt(row[index * 2 + 4] || 0);
+            const points2 = parseInt(row[index * 2 + 5] || 0);
             clubData[club].athlete1 += points1;
             clubData[club].athlete2 += points2;
         });
