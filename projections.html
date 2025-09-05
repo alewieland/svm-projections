@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <!-- Existing head content -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projektion</title>
@@ -13,9 +12,8 @@
 <body class="bg-light">
 
     <div class="container my-4">
-        <!-- Navigation Buttons -->
+        <!-- League Switch -->
         <div class="row justify-content-center mb-4">
-
             <div class="col-md-3 text-center mb-3 mb-md-0">
                 <button id="switchLeagueBtn" class="btn btn-success btn-lg w-100"></button>
             </div>
@@ -23,13 +21,8 @@
 
         <div class="row justify-content-center mb-4">
             <!-- Back to Index Button -->
-            <div class="col-md-3 text-center mb-3 mb-md-0">
-                <a href="index.html" class="btn btn-secondary btn-lg w-100">Zurück zum Zeitplan</a>
-            </div>
-
-            <!-- Switch Gender Button -->
             <div class="col-md-3 text-center">
-                <button id="switchGenderBtn" class="btn btn-primary btn-lg w-100"></button>
+                <a href="index.html" class="btn btn-secondary btn-lg w-100">Zurück zum Zeitplan</a>
             </div>
         </div>
 
@@ -72,57 +65,34 @@
             document.cookie = `${name}=${value}; path=/`;
         }
 
-        // Set the hidden input value, update the page title, and handle button functionality
         document.addEventListener('DOMContentLoaded', () => {
+            // Only two possible sheets now: 'nla' or 'nlb'
             let sheetName = getCookie('sheetName');
-            if (!sheetName) {
-                sheetName = 'men'; // Default to 'men' if no cookie is set
+            if (!sheetName || (sheetName !== 'nla' && sheetName !== 'nlb')) {
+                sheetName = 'nla'; // Default
                 setCookie('sheetName', sheetName);
             }
 
-            // Parse the sheetName to get gender and league
-            let gender = '';
-            let league = '';
-
-            if (sheetName.endsWith('_nlb')) {
-                league = 'nlb';
-                gender = sheetName.slice(0, -4); // Remove '_nlb' from sheetName
-            } else {
-                league = 'nla';
-                gender = sheetName;
-            }
+            const league = sheetName; // alias for clarity: 'nla' or 'nlb'
 
             // Update the hidden input value
             document.getElementById('sheetName').value = sheetName;
 
-            // Update the page title
+            // Update the page title (no gender)
             const leagueText = league.toUpperCase();
-            const genderText = gender === 'men' ? 'Männer' : 'Frauen';
-            document.getElementById('pageTitle').textContent = `Projektion SVM ${genderText} 2024 ${leagueText}`;
+            document.getElementById('pageTitle').textContent = `Projektion SVM 2025 ${leagueText}`;
 
             // Set the switch league button text and functionality
             const switchLeagueBtn = document.getElementById('switchLeagueBtn');
             switchLeagueBtn.textContent = league === 'nla' ? "Zur NLB" : "Zur NLA";
             switchLeagueBtn.onclick = () => {
                 const newLeague = league === 'nla' ? 'nlb' : 'nla';
-                const newSheetName = newLeague === 'nlb' ? `${gender}_nlb` : gender;
-                setCookie('sheetName', newSheetName);
+                setCookie('sheetName', newLeague);
                 // Reload the page to apply changes
                 window.location.replace(window.location.pathname + '?t=' + new Date().getTime());
             };
 
-            // Set the switch gender button text and functionality
-            const switchGenderBtn = document.getElementById('switchGenderBtn');
-            switchGenderBtn.textContent = gender === 'men' ? "Zu den Frauen" : "Zu den Männer";
-            switchGenderBtn.onclick = () => {
-                const newGender = gender === 'men' ? 'women' : 'men';
-                const newSheetName = league === 'nlb' ? `${newGender}_nlb` : newGender;
-                setCookie('sheetName', newSheetName);
-                // Reload the page to apply changes
-                window.location.replace(window.location.pathname + '?t=' + new Date().getTime());
-            };
-
-            // Now that we have the sheetName, we can use it in script.js to load the correct data
+            // Load projections for the selected league
             loadProjections(sheetName);
         });
     </script>

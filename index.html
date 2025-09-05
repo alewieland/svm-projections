@@ -1,277 +1,214 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVM NLA 2024</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet"> <!-- Link to the external CSS file -->
-    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVM NLA/NLB 2025</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" />
 </head>
 <body class="bg-light">
-
-    <!-- Header -->
-<!-- Header -->
-    <header class="bg-primary text-white py-3">
-        <div class="container">
-            <div class="row">
-                <div class="col text-center">
-                    <h1 id="pageTitle">SVM NLA 2024</h1>
-                    <h3 id="pageSubtitle">Stadion Deutweg, Winterthur, 14.9.2024</h3>
-                </div>
-            </div>
+  <!-- Header -->
+  <header class="bg-primary text-white py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col text-center">
+          <h1 id="pageTitle">SVM NLA/NLB 2025</h1>
         </div>
-    </header>
-    
-    <div class="container my-4">
-        <p class="text-center mb-4"><strong>Last but not least</strong>: Die SVM 2024 bieten die letzte Gelegenheit für packende Duelle. Die Website bietet nicht "nur" die erreichten Punkte, sondern gibt auch eine Projektion, wie viele Punkte aufgrund der Meldeliste noch erreicht werden sollten. Eine Erklärung findet Ihr <a href="#erklaerung">hier</a></p>
-        <p class="text-center mb-4"><strong>Information pour les francophones</strong>: Veuillez nous excuser, le site est en allemand et bonne chance pour le compétition CSI. Le site n'affiche pas seulement les points obtenus, mais propose également une projection des points qui devraient encore être atteints en fonction de la liste des engagés. Une explication se trouve <a href="#erklaerung">ici</a>. </p>
+      </div>
+    </div>
+  </header>
 
-        <!-- Row for the buttons -->
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-3 text-center">
-                <button id="switchLeagueBtn" class="btn btn-success btn-lg w-100"></button>
-            </div>
-        </div>
+  <div class="container my-4">
+    <p class="text-center mb-4">
+      <strong>Last but not least</strong>: Die SVM 2025 bieten die letzte Gelegenheit für packende Duelle. Die Website zeigt nicht nur die bereits erzielten Punkte, sondern auch eine Projektion der zu erwartenden Punkte gemäss Meldeliste. Eine Erklärung findet ihr <a href="#erklaerung">hier</a>.
+    </p>
+    <p class="text-center mb-4">
+      <strong>Information pour les francophones</strong> : Veuillez nous excuser, le site est en allemand. Bonne chance pour la compétition CSI. Le site n’affiche pas seulement les points obtenus, mais propose également une projection des points attendus selon la liste des engagés. Une explication se trouve <a href="#erklaerung">ici</a>.
+    </p>
 
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-3 text-center mb-3 mb-md-0">
-                <a href="projections.html" class="btn btn-primary btn-lg w-100" onclick="setSheetName('men')" style="background-color: blue;">Projektion Männer</a>
-            </div>
-            <div class="col-md-3 text-center mb-3 mb-md-0">
-                <a href="projections.html" class="btn btn-secondary btn-lg w-100" onclick="setSheetName('women')" style="background-color: darksalmon;">Projektion Frauen</a>
-            </div>
-        </div>
-
-        <!-- Row for the timetables -->
-        <div class="row">
-            <!-- Men’s Timetable -->
-            <div class="col-md-6 mb-4">
-                <h3 class="text-center">Zeitplan Männer</h3>
-                <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Zeit</th>
-                            <th>Disziplin</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="timetable-body-men">
-                        <!-- Men’s timetable data will be inserted here by JavaScript -->
-                    </tbody>
-                </table>
-
-                <!-- Men's Team Colors -->
-                <div class="team-colors mt-3">
-                    <h5 class="text-center">Teamfarben Männer</h5>
-                    <ul id="men-team-colors" class="list-unstyled">
-                        <!-- Team colors for men will be inserted here by JavaScript -->
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Women’s Timetable -->
-            <div class="col-md-6">
-                <h3 class="text-center">Zeitplan Frauen</h3>
-                <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Zeit</th>
-                            <th>Disziplin</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="timetable-body-women">
-                        <!-- Women’s timetable data will be inserted here by JavaScript -->
-                    </tbody>
-                </table>
-
-                <!-- Women's Team Colors -->
-                <div class="team-colors mt-3">
-                    <h5 class="text-center">Teamfarben Frauen</h5>
-                    <ul id="women-team-colors" class="list-unstyled">
-                        <!-- Team colors for women will be inserted here by JavaScript -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Erklärung Section -->
-        <div id="erklaerung" class="erklaerung"> <!-- Add an id to the section -->
-            <h5>Erklärung</h5>
-            <p>
-                Diese Seite bietet eine Übersicht über die Projektionen und Ergebnisse des SVM NLA 2024. </p>
-            <p>   Der Zeitplan ist ober ersichtlich, beim "Klicken" auf den Knopf "Projektion Männer" oder "Projektion Frauen" ist die aktuelle Gesamtübersicht abgebildet. Der dunklere Teil des Balkens stellt die abgeschlossenen Disziplinen dar, der hellere Teil die projezierten Punkte. Die Vereine sind nach projezierten Rangliste sortiert.</p>
-            <p>    Mittels des Auswahlmenus können die einzelnen Disziplinen ausgewählt werden und die erreichten oder projezierten Punkte dargestellt werden. </p> <br>
-            
-            <h5>Explication</h5>
-            <p>
-                Cette page offre un aperçu des projections et des résultats du SVM NLA 2024.</p>
-            <p>   Le horaire est visible en haut, en cliquant sur le bouton "Projektion Männer" ou "Projektion Frauen", la vue d'ensemble actuelle est affichée. La partie plus sombre de la barre représente les disciplines terminées, la partie plus claire représente les points projetés. Les clubs sont classés selon le classement projeté.</p>
-            <p>    À l'aide du menu déroulant, vous pouvez sélectionner les différentes disciplines et afficher les points obtenus ou projetés.</p> <br>
-
-            <h5>Korrekturen</h5>
-            <p>Falls etwas offensichtlich falsch ist, bitte eine kurze Nachricht an 076 420 54 33. Danke</p>
-
-        </div>
+    <!-- League switcher -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-3 text-center">
+        <button id="switchLeagueBtn" class="btn btn-success btn-lg w-100" aria-label="Liga umschalten"></button>
+      </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-left">&copy; 2024 SVM NLA. Alle Rechte vorbehalten.</div>
-        <div class="footer-right"><a href="impressum.html">Impressum</a></div>
-    </footer>
-
-      <!-- Cookie Consent Popup -->
-    <div id="cookieConsent" class="position-fixed bottom-0 start-0 end-0 bg-dark text-white p-3" style="display: none;">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    Diese Website verwendet nur notwendige Cookies, um das ordnungsgemäße Funktionieren der Website zu gewährleisten. Weitere Informationen finden Sie in unserer <a href="privacy-policy.html" class="text-decoration-underline text-white">Datenschutzerklärung</a>.
-                </div>
-                <button id="acceptCookies" class="btn btn-primary ms-3">Nur notwendige Cookies akzeptieren</button>
-            </div>
-        </div>
+    <!-- Projection button (depends on selected league) -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-3 text-center">
+        <a id="projectionBtn" href="projections.html" class="btn btn-primary btn-lg w-100" onclick="setSheetNameForLeague()">Projektion</a>
+      </div>
     </div>
 
-    <script src="colors.js"></script> <!-- Link to your JS file containing the color definitions -->
-    <script src="timetable.js"></script> <!-- Link to your script file -->
-    <script>
-        // Function to create the team color overview dynamically
-        function createTeamColorOverview(clubNames, containerId) {
-            const container = document.getElementById(containerId);
-            clubNames.forEach(club => {
-                const listItem = document.createElement('li');
-                listItem.className = 'team-color-item';
-                
-                const colorBox = document.createElement('span');
-                colorBox.className = `team-color-box ${clubColorClasses[club]}`; // Use the CSS class for background color
-                listItem.appendChild(colorBox);
-                
-                const label = document.createElement('span');
-                label.textContent = ` ${club}`;
-                listItem.appendChild(label);
-    
-                container.appendChild(listItem);
-            });
-        }
-    
-        // Function to get a cookie by name
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-    
-        // Function to set a cookie by name
-        function setCookie(name, value) {
-            document.cookie = `${name}=${value}; path=/`;
-        }
-    
-        // Function to toggle the league and update the page
-        function toggleLeague() {
-            let league = getCookie('league');
-            if (!league || league === 'nla') {
-                league = 'nlb';
-            } else {
-                league = 'nla';
-            }
-            setCookie('league', league);
-            // Reload the page to apply changes
-            window.location.replace(window.location.pathname + '?t=' + new Date().getTime());
-        }
-    
-        // Function to update the page title and switch league button text
-        function updatePageForLeague() {
-            let league = getCookie('league');
-            if (!league) {
-                league = 'nla'; // Default to NLA
-                setCookie('league', league);
-            }
-    
-            // Update page title and header
-            document.title = `SVM ${league.toUpperCase()} 2024`;
-            document.querySelector('header h1').textContent = `SVM ${league.toUpperCase()} 2024`;
-            document.querySelector('.container h1').textContent = `SVM ${league.toUpperCase()} 2024`;
-    
-            // Update the subtitle based on the league
-            const pageSubtitle = document.getElementById('pageSubtitle');
-            if (league === 'nla') {
-                pageSubtitle.textContent = 'Stadion Deutweg, Winterthur, 14.9.2024';
-            } else {
-                pageSubtitle.textContent = 'Leichtathletikanlage Neudorf, St. Gallen, 14.2.2024';
-            }
-    
-            // Update the switch league button text
-            const switchLeagueBtn = document.getElementById('switchLeagueBtn');
-            switchLeagueBtn.textContent = league === 'nla' ? "Zur NLB" : "Zur NLA";
-            switchLeagueBtn.onclick = toggleLeague;
-    
-            // Update the projection buttons to include the correct league in the sheetName
-            const menButton = document.querySelector('a[onclick="setSheetName(\'men\')"]');
-            const womenButton = document.querySelector('a[onclick="setSheetName(\'women\')"]');
-    
-            menButton.setAttribute('onclick', `setSheetName('men${league === 'nlb' ? '_nlb' : ''}')`);
-            womenButton.setAttribute('onclick', `setSheetName('women${league === 'nlb' ? '_nlb' : ''}')`);
-    
-            // Update the team color overviews
-            updateTeamColorOverviews(league);
-        }
-    
-        // Function to update team color overviews based on the league
-        function updateTeamColorOverviews(league) {
-            // Clear existing team color overviews
-            document.getElementById('men-team-colors').innerHTML = '';
-            document.getElementById('women-team-colors').innerHTML = '';
-    
-            if (league === 'nla') {
-                // NLA teams
-                createTeamColorOverview(['LCZ', 'STB', 'LG Züri +', 'LG Basel Regio', 'LC Schaffhausen', 'Stade Gèneve', 'COA Valais Romand', 'LG Thun'], 'men-team-colors');
-                createTeamColorOverview(['LCZ', 'STB', 'LV Winterthur', 'LG LZO', 'BTV Aarau', 'LG Basel Regio', 'LG Oberthurgau', 'LG Züri +'], 'women-team-colors');
-            } else {
-                // NLB teams (update these lists with actual NLB teams)
-                createTeamColorOverview(['LV Winterthur', 'COA LR', 'TVL', 'BTV Aarau', 'LC Brühl LA', 'LG LZO', 'LG NS Luzern', 'FSG Alle'], 'men-team-colors');
-                createTeamColorOverview(['LC Brühl LA', 'TV Wohlen', 'LG Thun', 'COA LR', 'LC Schaffhausen', 'LGKE', 'LG NS Luzern', 'LC Frauenfeld'], 'women-team-colors');
-            }
-        }
-    
-        // Modify the setSheetName function to also set the league if not already set
-        function setSheetName(sheetName) {
-            let league = getCookie('league');
-            if (!league) {
-                league = 'nla';
-                setCookie('league', league);
-            }
-            // Append '_nlb' to the sheetName if the league is NLB
-            if (league === 'nlb' && !sheetName.endsWith('_nlb')) {
-                sheetName += '_nlb';
-            }
-            document.cookie = "sheetName=" + sheetName + "; path=/";
-        }
-    
-        // Call updatePageForLeague when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            updatePageForLeague();
-            showCookieConsent();
-        });
-    
-        // Existing Cookie Consent functions
-        function showCookieConsent() {
-            const consent = getCookie("cookieConsent");
-            if (!consent) {
-                document.getElementById('cookieConsent').style.display = 'block';
-            }
-        }
-    
-        function acceptCookies() {
-            document.cookie = "cookieConsent=accepted; max-age=" + (60 * 60 * 24 * 365) + "; path=/";
-            document.getElementById('cookieConsent').style.display = 'none';
-        }
-    
-        document.getElementById('acceptCookies').addEventListener('click', acceptCookies);
-    </script>
-    
+    <!-- League Timetable (single, league-wide) -->
+    <div class="row">
+      <div class="col-12 mb-4">
+        <h3 class="text-center">Zeitplan</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Zeit</th>
+                <th>Disziplin</th>
+                <th>Geschlecht</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+          <tbody id="timetable-body"><!-- timetable data injected via JS --></tbody>
+        </table>
 
-    
+        <!-- Team Colors (single, league-wide) -->
+        <div class="team-colors mt-3">
+          <h5 class="text-center">Teamfarben</h5>
+          <ul id="team-colors" class="list-unstyled"><!-- colors injected via JS --></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Erklärung Section -->
+    <div id="erklaerung" class="erklaerung">
+      <h5>Erklärung</h5>
+      <p>Diese Seite bietet eine Übersicht über Projektionen und Ergebnisse der SVM NLA/NLB 2025. Oben kannst du zwischen <strong>NLA</strong> und <strong>NLB</strong> umschalten. Die Übersichten und Farben passen sich automatisch an die gewählte Liga an.</p>
+      <p>Auf der Seite <em>Projektion</em> wird die aktuelle Gesamtübersicht dargestellt. Der dunklere Teil des Balkens stellt abgeschlossene Disziplinen dar, der hellere Teil die projizierten Punkte. Die Vereine sind nach projizierter Rangliste sortiert.</p>
+      <p>Über das Auswahlmenü auf der Projections-Seite können einzelne Disziplinen gewählt werden, um erzielte oder projizierte Punkte anzuzeigen.</p>
+      <br />
+
+      <h5>Explication</h5>
+      <p>Cette page offre un aperçu des projections et résultats de la SVM NLA/NLB 2025. En haut, vous pouvez basculer entre <strong>NLA</strong> et <strong>NLB</strong>. Les vues et couleurs s’adaptent automatiquement à la ligue choisie.</p>
+      <p>Dans la page <em>Projektion</em>, l’aperçu général est affiché : la partie plus sombre de la barre représente les disciplines terminées, la partie plus claire les points projetés. Les clubs sont classés selon le classement projeté.</p>
+      <p>Dans la page des projections, un menu déroulant permet de choisir les disciplines pour afficher les points obtenus ou projetés.</p>
+      <br />
+
+      <h5>Korrekturen</h5>
+      <p>Falls etwas offensichtlich falsch ist, bitte eine kurze Nachricht an 076 420 54 33. Danke.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-left">&copy; 2025 SVM NLA/NLB. Alle Rechte vorbehalten.</div>
+    <div class="footer-right"><a href="impressum.html">Impressum</a></div>
+  </footer>
+
+  <!-- Cookie Consent Popup -->
+  <div id="cookieConsent" class="position-fixed bottom-0 start-0 end-0 bg-dark text-white p-3" style="display: none;">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          Diese Website verwendet nur notwendige Cookies, um das ordnungsgemäße Funktionieren der Website zu gewährleisten. Weitere Informationen finden Sie in unserer <a href="privacy-policy.html" class="text-decoration-underline text-white">Datenschutzerklärung</a>.
+        </div>
+        <button id="acceptCookies" class="btn btn-primary ms-3">Nur notwendige Cookies akzeptieren</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="colors.js"></script>
+  <script src="timetable.js"></script>
+  <script>
+    // --- Helpers: Cookies ---
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    function setCookie(name, value, maxAgeSeconds) {
+      const maxAge = maxAgeSeconds ? `; max-age=${maxAgeSeconds}` : '';
+      document.cookie = `${name}=${value}; path=/${maxAge}`;
+    }
+
+    // --- UI: Team colors ---
+    function createTeamColorOverview(clubNames, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      clubNames.forEach((club) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'team-color-item';
+
+        const colorBox = document.createElement('span');
+        colorBox.className = `team-color-box ${clubColorClasses[club] || ''}`;
+        colorBox.setAttribute('title', club);
+        listItem.appendChild(colorBox);
+
+        const label = document.createElement('span');
+        label.textContent = ` ${club}`;
+        listItem.appendChild(label);
+
+        container.appendChild(listItem);
+      });
+    }
+
+    // --- League toggling ---
+    function toggleLeague() {
+      let league = getCookie('league');
+      league = !league || league === 'nla' ? 'nlb' : 'nla';
+      setCookie('league', league);
+      // Reload to ensure other pages/scripts react the same way
+      window.location.replace(window.location.pathname + '?t=' + Date.now());
+    }
+
+    function setSheetNameForLeague() {
+      // store the selected league as sheetName for projections.html
+      const league = getCookie('league') || 'nla';
+      setCookie('sheetName', league);
+    }
+
+    function updatePageForLeague() {
+      let league = getCookie('league');
+      if (!league) {
+        league = 'nla';
+        setCookie('league', league);
+      }
+
+      // Title & header
+      const titleText = `SVM ${league.toUpperCase()} 2025`;
+      document.title = titleText;
+      document.getElementById('pageTitle').textContent = titleText;
+      // Keep the same subtitle for both leagues (event-wide)
+
+      // Switch button
+      const switchLeagueBtn = document.getElementById('switchLeagueBtn');
+      switchLeagueBtn.textContent = league === 'nla' ? 'Zur NLB' : 'Zur NLA';
+      switchLeagueBtn.onclick = toggleLeague;
+
+      // Projection button keeps same label; it uses current league when clicked
+      document.getElementById('projectionBtn').setAttribute('onclick', 'setSheetNameForLeague()');
+
+      // Team colors per league (union of früheren Männer/Frauen-Listen)
+      const teamsNLA = unique([
+        'LCZ','STB','LG Züri +','LG Basel Regio','LC Schaffhausen',
+        'LV Winterthur','LG Oberthurgau', 'COA LR'
+      ]);
+      const teamsNLB = unique([
+        'TVL','BTV Aarau','LG LZO','LG NS Luzern',
+        'LG Thun', 'COA Valais Romand', 'Stade Genève', 'LC Frauenfeld'
+      ]);
+
+      createTeamColorOverview(league === 'nla' ? teamsNLA : teamsNLB, 'team-colors');
+
+      // If your timetable.js populates by league, it can use the cookie 'league' and write into #timetable-body
+    }
+
+    function unique(arr) {
+      return [...new Set(arr)];
+    }
+
+    // --- Cookie consent ---
+    function showCookieConsent() {
+      const consent = getCookie('cookieConsent');
+      if (!consent) {
+        document.getElementById('cookieConsent').style.display = 'block';
+      }
+    }
+    function acceptCookies() {
+      setCookie('cookieConsent', 'accepted', 60 * 60 * 24 * 365);
+      document.getElementById('cookieConsent').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePageForLeague();
+      showCookieConsent();
+      document.getElementById('acceptCookies').addEventListener('click', acceptCookies);
+    });
+  </script>
 </body>
 </html>
